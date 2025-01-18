@@ -15,8 +15,12 @@ O objetivo deste repositório é fornecer uma configuração básica do Zsh que 
 Para baixar o conteúdo deste repositório e importar as configurações para o seu terminal, você pode usar os seguintes comandos:
 
 ```bash
+
 # Clonar o repositório
 git clone https://github.com/seu-usuario/nome-do-repositorio.git
+
+# Clonar Repositorio zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
 
 # Navegar até o diretório clonado
 cd nome-do-repositorio
