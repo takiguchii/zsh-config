@@ -1,92 +1,146 @@
-# Configurações do Zsh
+# 💻 Minhas Configurações de Terminal (Zsh & Oh My Zsh - Fedora)
 
-Repositório com minhas configurações personalizadas do **Zsh**, incluindo plugins e temas, para facilitar reinstalações e migração entre computadores.
+Este repositório contém as minhas configurações personalizadas do **Zsh** com **Oh My Zsh** otimizadas para o **Fedora Workstation**. Ele serve tanto para facilitar a configuração de uma nova máquina do zero quanto para compartilhar com quem deseja ter um terminal produtivo, rápido e inteligente.
 
 ---
 
-## 🚀 Instalação rápida
+## 🚀 O que há de novo? (Fedora Edition)
+A configuração anterior era baseada no Ubuntu e foi atualizada para focar no ecossistema do **Fedora**.
+* **Plugins modernos:** Adicionado o autocomplete em tempo real.
+* **Caminhos de desenvolvimento integrados:** Configurações prontas para **Flutter** e **Android SDK** (incluindo emulador e platform-tools).
+* **Organização limpa:** Plugins externos gerenciados como submodules do Git.
+
+---
+
+## ⚙️ Pré-requisitos no Fedora
+
+Antes de aplicar as configurações, você precisará ter o Zsh e o git instalados no seu sistema.
 
 ```bash
-# Clonar o repositório
-git clone https://github.com/takiguchii/zsh-config.git
+# 1. Instalar o Zsh e o Git
+sudo dnf install zsh git -y
+
+# 2. Definir o Zsh como shell padrão do seu usuário
+chsh -s $(which zsh)
+```
+*(Nota: Pode ser necessário reiniciar a sessão/computador para aplicar a alteração do shell padrão).*
+
+### Instalar o Oh My Zsh
+O Oh My Zsh é o framework que gerencia nossa configuração. Instale-o com o comando abaixo:
+```bash
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+```
+
+---
+
+## 🔌 Plugins Inclusos e Ativos
+
+Os plugins abaixo estão integrados a esta configuração. Eles aceleram a navegação e digitação no terminal:
+
+1. **`git`**: Atalhos e aliases nativos para comandos do Git.
+2. **`zsh-autosuggestions`**: Sugere comandos baseado no seu histórico de uso conforme você digita (estilo terminal Fish).
+3. **`zsh-syntax-highlighting`**: Adiciona realce de sintaxe em tempo real aos comandos digitados (verde para comandos válidos, vermelho para inválidos).
+4. **`zsh-autocomplete`**: Oferece autocompletar em tempo real conforme você digita, mostrando um menu interativo com opções de arquivos, comandos e históricos.
+
+---
+
+## 📥 Como Instalar e Aplicar
+
+Siga o passo a passo abaixo para clonar e aplicar a configuração no seu terminal do zero.
+
+### 1. Clonar o repositório recursivamente
+Como os plugins estão configurados como submódulos do Git, você deve clonar o repositório trazendo estes arquivos:
+
+```bash
+# Clonar trazendo todos os submódulos de plugins
+git clone --recursive https://github.com/takiguchii/zsh-config.git
 cd zsh-config
+```
 
-# Fazer backup do .zshrc atual (se existir)
-[ -f ~/.zshrc ] && mv ~/.zshrc ~/.zshrc.backup
+> [!TIP]
+> Se você já clonou de forma simples (sem `--recursive`), execute o comando abaixo para puxar os plugins:
+> ```bash
+> git submodule update --init --recursive
+> ```
 
-# Copiar minhas configs
+### 2. Fazer backup da configuração atual (Recomendado)
+Se você já possui um arquivo `.zshrc` no seu sistema, faça um backup de segurança:
+```bash
+[ -f ~/.zshrc ] && cp ~/.zshrc ~/.zshrc.backup
+```
+
+### 3. Copiar os arquivos de configuração
+Copie o arquivo `.zshrc` e a pasta `custom` (que contém os plugins e temas adicionais) para a sua pasta Home (`~`):
+
+```bash
+# Copiar o arquivo de configuração principal
 cp .zshrc ~/
 
-# (Opcional) Copiar configuração do Powerlevel10k
-[ -f .p10k.zsh ] && cp .p10k.zsh ~/
-
-# (Opcional) Copiar pastas customizadas do Oh My Zsh
-[ -d custom ] && cp -r custom/* ~/.oh-my-zsh/custom/
+# Copiar a pasta customizada mantendo a estrutura
+cp -r custom/* ~/.oh-my-zsh/custom/
 ```
 
----
-
-## 🔌 Plugins recomendados
-
-Se estiver usando **Oh My Zsh**, instale também:
-
+### 4. Recarregar o Terminal
+Para aplicar as alterações imediatamente sem fechar o terminal, execute:
 ```bash
-# Autosuggestions
-git clone https://github.com/zsh-users/zsh-autosuggestions   ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-
-# Syntax Highlighting
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git   ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-```
-
-Depois, edite o `.zshrc` e adicione:
-
-```zsh
-plugins=(
-  git
-  zsh-autosuggestions
-  zsh-syntax-highlighting
-)
+source ~/.zshrc
 ```
 
 ---
 
-## 🎨 Tema (Powerlevel10k)
+## 🛠️ Detalhes da Configuração de Desenvolvimento
 
-Se quiser usar o **Powerlevel10k**:
+O `.zshrc` exportado está configurado de forma genérica e limpa com os seguintes caminhos utilitários de desenvolvimento:
 
-```bash
-git clone --depth=1 https://github.com/romkatv/powerlevel10k.git   ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k
-```
+### 📱 Android SDK & Emulador
+Configurado automaticamente apontando para o diretório padrão no Linux:
+* `ANDROID_HOME` definido como `$HOME/Android/Sdk`.
+* Adicionado ao PATH:
+  * O emulador de Android.
+  * As ferramentas de plataforma (`platform-tools`, como `adb`).
+  * Ferramentas de linha de comando mais recentes (`cmdline-tools`).
 
-E no seu `~/.zshrc`, altere a linha do tema:
-
-```zsh
-ZSH_THEME="powerlevel10k/powerlevel10k"
-```
-
----
-
-## 🔄 Atualizando a configuração
-
-Para salvar uma nova versão das configs neste repositório:
-
-```bash
-# Entrar na pasta do repositório
-cd ~/zsh-config
-
-# Copiar suas novas configs
-cp ~/.zshrc .zshrc
-[ -f ~/.p10k.zsh ] && cp ~/.p10k.zsh .p10k.zsh
-cp -r ~/.oh-my-zsh/custom/ custom/
-
-# Commit e push
-git add .
-git commit -m "Atualiza minhas configs do Zsh"
-git push origin main
-```
+### 🐦 Flutter
+Adiciona a pasta binária do Flutter ao PATH caso esteja instalada na pasta padrão:
+* `$HOME/flutter/bin`
 
 ---
 
-## 📦 Sobre
+## 🔒 Cuidados com Arquivos Sensíveis
 
-Este repositório me ajuda a manter minhas configurações de Zsh organizadas e prontas para serem usadas em qualquer máquina.
+> [!CAUTION]
+> **Nunca comite chaves de API, senhas ou tokens!**
+> Se você for atualizar ou modificar este repositório com suas próprias alterações locais, tome os seguintes cuidados:
+> 
+> * Verifique se o seu `.zshrc` pessoal não contém tokens de API (ex: `GITHUB_TOKEN`, chaves OpenAI, etc.).
+> * Se precisar exportar variáveis sensíveis localmente no seu terminal, prefira colocá-las em um arquivo separado que não seja rastreado pelo Git, por exemplo `~/.zsh_local` (adicionado ao seu `.gitignore` local) e dê source dele no seu `.zshrc` com:
+>   ```bash
+>   [ -f ~/.zsh_local ] && source ~/.zsh_local
+>   ```
+
+---
+
+## 🔄 Como Exportar e Atualizar as Configurações
+
+Caso você altere suas configurações locais no Fedora e queira salvá-las de volta neste repositório para manter o backup atualizado:
+
+1. Acesse a pasta do repositório:
+   ```bash
+   cd ~/Documentos/github/zsh-config
+   ```
+2. Copie os arquivos da sua máquina para o repositório local:
+   ```bash
+   # Copia o .zshrc atualizado
+   cp ~/.zshrc .zshrc
+   
+   # Opcional: Copia arquivos específicos da pasta custom
+   cp -r ~/.oh-my-zsh/custom/* custom/
+   ```
+3. Remova trechos temporários ou sensíveis que tenham sido adicionados localmente antes de commitar.
+4. Crie uma branch de alterações, realize o commit local e faça o push.
+
+---
+
+## 📄 Licença
+
+Este projeto está sob a licença **MIT**. Veja o arquivo [LICENSE](file:///home/takiguchi/Documentos/github/zsh-config/LICENSE) para mais detalhes.
